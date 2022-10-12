@@ -1,0 +1,38 @@
+.statistics-wrapper {
+    margin-top: 2rem;
+
+    table {
+
+        border-collapse: collapse;
+        width: 80%;
+        margin: 0 auto;
+
+        td,
+        th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        td {
+            font-size: 1.5rem;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ddd;
+        }
+
+        th {
+            font-size: 1.5rem;
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #04AA6D;
+            color: white;
+
+        }
+    }
+}

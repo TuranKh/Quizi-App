@@ -1,0 +1,26 @@
+<div class="question-holder">
+  <p class="question-text">
+    <!-- question is formgroup -->
+    <!-- {{ question | json }} -->
+    {{ question.value.order }}
+  </p>
+
+  <div class="image-holder">
+    <img src="http://localhost:8000/images/{{ question.value.image }}" alt="" />
+  </div>
+  <ul>
+    <li *ngFor="let option of question.value.answerOptions">
+      <label>
+        <input
+          [disabled]="isExamEnd"
+          (change)="
+            question.patchValue({ selectedAnswerId: questionAnswers[option] })
+          "
+          [attr.name]="question.value.order"
+          type="radio"
+        />
+        {{ option }}
+      </label>
+    </li>
+  </ul>
+</div>
