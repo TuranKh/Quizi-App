@@ -18,6 +18,7 @@ var storage = multer.diskStorage({
   },
 });
 var userRole = 0;
+var userId;
 var isUserValid = false;
 const upload = multer({ dest: "uploads/", storage });
 
@@ -26,6 +27,8 @@ router.post("/user/login", urlencodedParser, async (req, res) => {
   let user = req.body;
   let query = `SELECT id, password, name, email, user_role FROM user WHERE email = '${user.email}' AND is_valid = 1 `;
   const result = await querysender.sendLoginQuery(query);
+
+  // Quiz_id in questions table = 1 means that quiz is active
 
   if (result.length) {
     // role = 1 -> admin
@@ -36,7 +39,6 @@ router.post("/user/login", urlencodedParser, async (req, res) => {
       function (err, compareResult) {
         if (compareResult) {
           userRole = result[0].user_role;
-          console.log(userRole, " colde");
           isUserValid = true;
           const tokenl = jwt.sign(
             {
@@ -112,42 +114,84 @@ router.post("/admin/update-user", urlencodedParser, async (req, res) => {
 
 router.post("/submit-answers", urlencodedParser, async (req, res) => {
   const userAnswers = req.body;
+
   let query = `UPDATE user SET answers='${userAnswers.answers}' WHERE id='${userAnswers.id}';`;
   querysender.sendFinalQuery(query, res);
 });
 
 router.post("/admin/send-quiz", upload.array("photos", 100), (req, res) => {
-  console.log(userRole);
   if (userRole === 1) {
     let images = req.files;
     let quizDetails = req.query;
-    let quizName = quizDetails.quizName;
-    let quizDuration = quizDetails.quizDuration;
+    let numberOfQuestions = images.length;
+    const { quizDuration, quizName } = quizDetails;
     let trueAnswers = quizDetails.trueAnswers;
-
+    resetQuestionsAndUsers(res);
+    let values = "";
     images.forEach((item, index) => {
       let imgsrc = item.filename;
-      let query = `INSERT INTO questions( question_image, answer, quiz_id) VALUES ('${imgsrc}', '${trueAnswers[index]}','1')`;
-      querysender.sendFinalQuery(query, res);
+      if (index === numberOfQuestions - 1) {
+        values += `('${imgsrc}', '${trueAnswers[index]}','1')`;
+      } else {
+        values += `('${imgsrc}', '${trueAnswers[index]}','1'),`;
+      }
     });
+    createNewQuiz(quizDuration, quizName);
+    let query = `INSERT INTO questions( question_image, answer, quiz_id) VALUES ${values}`;
+    querysender.sendFinalQuery(query, res);
   } else {
-    console.log("error ");
     res.send(401);
   }
 });
 
+const createNewQuiz = function (duration, name) {
+  let query = "UPDATE quiz SET is_active = 0";
+  querysender.queryWithoutResponse(query);
+  query = `INSERT INTO quiz(name, duration, is_active) VALUES ('${name}', '${duration}', '1')`;
+  querysender.queryWithoutResponse(query);
+};
+
+const resetQuestionsAndUsers = function () {
+  let query = "UPDATE `questions` SET `quiz_id`='0'";
+  querysender.queryWithoutResponse(query);
+  query = "UPDATE `user` SET `attended_quiz` = '0'";
+  querysender.queryWithoutResponse(query);
+};
+
 router.get("/get-quiz", urlencodedParser, async (req, res) => {
-  if (isUserValid) {
-    let query = "SELECT id, question_image FROM `questions` WHERE quiz_id = 1";
-    querysender.sendFinalQuery(query, res);
+  userId = req.query.id;
+  const attendedQuiz = await didUserAttendedQuiz();
+  console.log(attendedQuiz, " attended");
+  if (attendedQuiz) {
+    res.status(406).send({
+      message: "Siz mövcud olan son imtahana artıq giriş etmisiniz!",
+    });
   } else {
-    res.status(401).send({ message: "Sistemə daxil olun" });
+    if (isUserValid) {
+      let query =
+        "SELECT questions.id, question_image, quiz.duration FROM `questions` JOIN quiz ON questions.quiz_id = quiz.is_active WHERE questions.quiz_id = 1";
+      userAttendedQuiz();
+      // SELECT question_image, quiz.duration
+      // FROM questions
+      // JOIN quiz ON questions.quiz_id = quiz.is_active
+      // WHERE questions.quiz_id = 1
+
+      querysender.sendFinalQuery(query, res);
+    } else {
+      res.status(401).send({ message: "Sistemə daxil olun" });
+    }
   }
 });
 
-router.get("/duration", urlencodedParser, async (req, res) => {
-  let query = "SELECT `duration` FROM `quiz` WHERE id = 1";
-  querysender.sendFinalQuery(query, res);
-});
+const userAttendedQuiz = function () {
+  let query = `UPDATE user SET attended_quiz = '1' WHERE id=${userId}`;
+  querysender.queryWithoutResponse(query);
+};
+
+const didUserAttendedQuiz = async function () {
+  let query = `SELECT attended_quiz FROM user WHERE id=${userId}`;
+  const result = await querysender.checkUserQuizAttendance(query);
+  return result === 1;
+};
 
 module.exports = router;

@@ -15,13 +15,14 @@ import { questionAnswers } from '../models/enums/questionAnswer.enum';
 export class QuizComponent implements OnInit, AfterViewInit {
   questionsFormArray: FormArray<FormGroup> | null = null;
   examEnd = false;
-  timeLeft: any = 200;
+  timeLeft: any;
   interval: any;
   message = '';
   image: any;
   hasPermission = true;
   currentTime = Date.now();
   userId: number = 0;
+  submitButton = true;
 
   countdown: number | null = null;
 
@@ -33,8 +34,9 @@ export class QuizComponent implements OnInit, AfterViewInit {
     private userCredentials: UserService
   ) {}
 
-  ngAfterViewInit(): void {
-    this.startCountdown();
+  ngAfterViewInit(): void {}
+  ngOnDestroy() {
+    clearInterval(this.interval);
   }
 
   ngOnInit(): void {
@@ -75,26 +77,38 @@ export class QuizComponent implements OnInit, AfterViewInit {
       answers: Number(answers),
     };
     this.quiz.submitUserAnswers(submitAnswers).subscribe((res) => {
-      console.log(res);
+      this.submitButton = false;
     });
-    console.log('executed');
     // this.router.navigateByUrl('/login');
   }
 
   getAllQuestions() {
-    this.quiz.getQuestions().subscribe((res: any) => {
-      if (res.status !== 401) {
-        console.log(res);
-        this.initForm(res);
-        this.getExamDuration();
-      } else {
-        this.snackBar.openFailureSnackBar(res.message);
+    this.quiz.getQuestions().subscribe(
+      (res: any) => {
+        if (res.status !== 401 || res.status !== 406) {
+          if (res.length !== 0) {
+            this.initForm(res);
+          } else {
+            this.snackBar.openFailureSnackBar(
+              'Hal-hazırda aktiv imtahan yoxdur!'
+            );
+            this.router.navigateByUrl('/login');
+          }
+        } else {
+          this.snackBar.openFailureSnackBar(res.message);
+          this.router.navigateByUrl('/login');
+        }
+      },
+      (err) => {
+        this.snackBar.openFailureSnackBar(err.error.message);
         this.router.navigateByUrl('/login');
       }
-    });
+    );
+    this.startCountdown();
   }
 
   initForm(questions: Array<any>) {
+    this.timeLeft = questions[0].duration * 60;
     const questionForms = questions.map((obj, index) => {
       return this.fb.group({
         image: obj.question_image,
@@ -104,14 +118,5 @@ export class QuizComponent implements OnInit, AfterViewInit {
       });
     });
     this.questionsFormArray = this.fb.array(questionForms);
-  }
-  getExamDuration() {
-    // this.quiz.getExamDuration().subscribe((res: any) => {
-    //   this.timeLeft = res[0].duration * 60;
-    //   if (!this.timeLeft) {
-    //     this.snackBar.openFailureSnackBar();
-    //     this.router.navigateByUrl('/login');
-    //   }
-    // });
   }
 }

@@ -7,7 +7,12 @@
         *ngFor="let item of questionsFormArray?.controls"
       >
       </app-question>
-      <button (click)="submitAnswers()" class="submit-button" type="submit">
+      <button
+        *ngIf="submitButton"
+        (click)="submitAnswers()"
+        class="submit-button"
+        type="submit"
+      >
         İmtahanı yekunlaşdır
       </button>
     </form>

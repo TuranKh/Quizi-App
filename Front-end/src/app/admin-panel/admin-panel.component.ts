@@ -17,18 +17,7 @@ export class AdminPanelComponent implements OnInit {
     private router: Router
   ) {}
   ngOnInit(): void {
-    this._adminService.getWaitingList().subscribe(
-      (res) => {
-        this.router.navigateByUrl('/admin/waiting-list');
-      },
-      (err) => {
-        this.snackBar.openFailureSnackBar(
-          'Sistemdən istifadə etmək hüququnuz yoxdur!',
-          ''
-        );
-        this.router.navigateByUrl('/login');
-      }
-    );
+    this.router.navigateByUrl('/admin/waiting-list');
   }
 
   activeMenu: number = 0;

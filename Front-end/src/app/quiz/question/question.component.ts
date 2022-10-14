@@ -11,9 +11,7 @@ export class QuestionComponent implements OnInit, AfterViewInit {
   @Input() question!: FormGroup<any>;
   @Input() isExamEnd!: boolean;
 
-  ngOnInit(): void {
-    console.log(this.question, ' this .questio');
-  }
+  ngOnInit(): void {}
 
   ngAfterViewInit(): void {}
 
