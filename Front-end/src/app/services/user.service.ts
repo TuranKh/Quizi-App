@@ -32,4 +32,7 @@ export class UserService {
   getUserId() {
     return this.userId;
   }
+  getUserAnswers(userId: number) {
+    return this.http.get(this.baseUrl + `/statistics?id=${userId}`)
+  }
 }

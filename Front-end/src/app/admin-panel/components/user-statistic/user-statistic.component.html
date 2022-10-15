@@ -1,23 +1,58 @@
 <div class="statistics-wrapper">
-    <table>
-        <thead>
-            <tr>
-                <th>Ad/Soyad</th>
-                <th>Elektron ünvan</th>
-                <th>Əlaqə nömrəsi</th>
-                <th>İmtahan tarixi</th>
-                <th>Nəticə (%)</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let item of tableData">
-                <td>{{item.name}} {{item.surname}}</td>
-                <td>{{item.email}}</td>
-                <td>{{item.phone_number}}</td>
-                <td>{{item.user_role ? 'Admin' : 'Müəllim'}}</td>
-            </tr>
-        </tbody>
+  <table>
+    <thead>
+      <tr>
+        <th>Ad/Soyad</th>
+        <th>Elektron ünvan</th>
+        <th>Əlaqə nömrəsi</th>
+        <th>Son imtahan nəticəsi (%)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        (click)="getUserAnswers(item.id, item.attended_quiz)"
+        *ngFor="let item of tableData"
+      >
+        <td>{{ item.name }} {{ item.surname }}</td>
+        <td>{{ item.email }}</td>
+        <td>{{ item.phone_number }}</td>
+        <td>
+          {{
+            item.attended_quiz === 0
+              ? "İştirak etməyib"
+              : item.last_quiz_score + "%"
+          }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
-
-    </table>
+<div *ngIf="attendedQuiz" class="quiz-holder">
+  <div class="quiz-content">
+    <div
+      class="question-holder"
+      *ngFor="let question of questions; let index = index"
+    >
+      <div
+        class="icon-holder"
+        *ngIf="userAnswers.charAt(index) === questionAnswers[question.answer]"
+      >
+        <img src="../../../../assets/SVGs/accept.svg" alt="" />
+      </div>
+      <p>
+        İstifadəçinin seçdiyi cavab:
+        {{ questionAnswers[userAnswers.charAt(index)] }}
+      </p>
+      <p style="color: green">
+        Düzgün cavab: {{ questionAnswers[question.answer] }}
+      </p>
+      <div class="image-holder">
+        <img
+          src="http://localhost:8000/images/{{ question.question_image }}"
+          alt=""
+        />
+      </div>
+    </div>
+  </div>
 </div>

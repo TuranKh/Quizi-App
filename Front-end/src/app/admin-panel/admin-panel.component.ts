@@ -1,6 +1,4 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AdminService } from '../services/admin.service';
 import { SnackbarService } from '../services/snackbar.service';
@@ -17,7 +15,8 @@ export class AdminPanelComponent implements OnInit {
     private router: Router
   ) {}
   ngOnInit(): void {
-    this.router.navigateByUrl('/admin/waiting-list');
+    this.router.navigateByUrl('/admin/statistics');
+    this.checkActiveTab(1)
   }
 
   activeMenu: number = 0;

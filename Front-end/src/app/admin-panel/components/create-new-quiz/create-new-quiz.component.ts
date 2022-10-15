@@ -18,9 +18,7 @@ import { SnackbarService } from 'src/app/services/snackbar.service';
 })
 export class CreateNewQuizComponent implements OnInit {
   constructor(
-    private http: HttpClient,
     private fb: FormBuilder,
-    private _quiz: QuizService,
     private _adminService: AdminService,
     private snackBar: SnackbarService
   ) { }
@@ -83,9 +81,10 @@ export class CreateNewQuizComponent implements OnInit {
       quizName: this.finalForm.value.quizName,
       quizDuration: this.finalForm.value.quizDuration,
       trueAnswers: this.questionsImages.value.map(
-        (question) => question.trueAnswer
+        (question) => question.trueAnswer + 1
       ),
     };
+
 
     const formData = new FormData();
     this.filesMap.forEach((file: { file: File }) => {

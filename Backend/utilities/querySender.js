@@ -25,6 +25,14 @@ const queryWithoutResponse = (mysql) => {
   });
 };
 
+const submitAnswersAndGetCorrectAnswers = (mysql) => {
+  return new Promise((resolve, reject) => {
+    con.query(mysql, (err, result) => {
+      if (err) throw err;
+      resolve(result);
+    });
+  });
+};
 const checkUserQuizAttendance = (mysql) => {
   return new Promise((resolve, reject) => {
     con.query(mysql, (err, result) => {
@@ -58,3 +66,4 @@ exports.getOriginalPassword = getOriginalPassword;
 exports.sendLoginQuery = sendLoginQuery;
 exports.queryWithoutResponse = queryWithoutResponse;
 exports.checkUserQuizAttendance = checkUserQuizAttendance;
+exports.submitAnswersAndGetCorrectAnswers = submitAnswersAndGetCorrectAnswers;

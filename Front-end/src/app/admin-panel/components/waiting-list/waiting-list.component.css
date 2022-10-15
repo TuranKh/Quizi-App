@@ -1,0 +1,72 @@
+.waiting-list {
+  margin-top: 2rem;
+  width: 100%;
+}
+
+.waiting-list table {
+  border-collapse: collapse;
+  width: 80%;
+  margin: 0 auto;
+}
+
+.waiting-list table td, .waiting-list table th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.waiting-list table td {
+  font-size: 1.5rem;
+}
+
+.waiting-list table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.waiting-list table tr:hover {
+  background-color: #ddd;
+}
+
+.waiting-list table th {
+  font-size: 1.5rem;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #04AA6D;
+  color: white;
+}
+
+.waiting-list table th:last-of-type {
+  width: 7rem;
+}
+
+.waiting-list .action-buttons {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.waiting-list .action-buttons .accept-wrapper {
+  -webkit-filter: invert(39%) sepia(99%) saturate(763%) hue-rotate(121deg) brightness(97%) contrast(97%);
+          filter: invert(39%) sepia(99%) saturate(763%) hue-rotate(121deg) brightness(97%) contrast(97%);
+}
+
+.waiting-list .action-buttons .bin-wrapper {
+  -webkit-filter: invert(51%) sepia(94%) saturate(2770%) hue-rotate(333deg) brightness(104%) contrast(98%);
+          filter: invert(51%) sepia(94%) saturate(2770%) hue-rotate(333deg) brightness(104%) contrast(98%);
+}
+
+.waiting-list .action-buttons div {
+  cursor: pointer;
+  width: 2.3rem;
+}
+
+.waiting-list .action-buttons div img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+/*# sourceMappingURL=waiting-list.component.css.map */

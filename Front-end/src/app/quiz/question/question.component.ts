@@ -10,8 +10,13 @@ import { questionAnswers } from 'src/app/models/enums/questionAnswer.enum';
 export class QuestionComponent implements OnInit, AfterViewInit {
   @Input() question!: FormGroup<any>;
   @Input() isExamEnd!: boolean;
+  @Input() correctAnswer !: number;
 
-  ngOnInit(): void {}
+  correction = 'none'
+
+  ngOnInit(): void {
+    
+  }
 
   ngAfterViewInit(): void {}
 

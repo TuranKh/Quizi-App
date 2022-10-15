@@ -11,7 +11,8 @@
   }
 
   .timer-holder,
-  .submit-button {
+  .submit-button,
+  .result-holder {
     border: 2px solid #7F265B;
     outline: none;
     background-color: white;
@@ -53,7 +54,25 @@
     box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
   }
 
+  .result-holder {
+    position: fixed;
+    left: 2rem;
+    top: 3rem;
+    color: #7F265B;
+    font-weight: 900;
+    min-height: 4.3rem;
+    text-align: center;
+    box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
+    min-width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+    padding: 1rem 2rem;
+}
+
+  }
+
   .quiz-form {
     padding-top: 3rem;
   }
-}

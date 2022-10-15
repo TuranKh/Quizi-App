@@ -6,15 +6,14 @@ import { RouterModule, Routes } from '@angular/router';
 import { WaitingListComponent } from './components/waiting-list/waiting-list.component';
 import { UserStatisticComponent } from './components/user-statistic/user-statistic.component';
 import { CommonModule } from '@angular/common';
-
 const routes: Routes = [{
   path: '', component: AdminPanelComponent, children: [
     { path: 'new-quiz', component: CreateNewQuizComponent },
     { path: 'waiting-list', component: WaitingListComponent },
-    { path: 'statistics', component: UserStatisticComponent }
+    { path: 'statistics', component: UserStatisticComponent}
   ]
-}];
-// aa shit ele bildim burdadir alright my bad 
+}]
+
 
 @NgModule({
   declarations: [AdminPanelComponent, CreateNewQuizComponent, WaitingListComponent, UserStatisticComponent],

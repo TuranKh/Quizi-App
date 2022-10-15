@@ -1,0 +1,86 @@
+.quiz-holder {
+  width: 100%;
+  background-color: #F1EBDB;
+  min-height: 100vh;
+}
+
+.quiz-holder .quiz-content {
+  width: 640px;
+  margin: 0 auto;
+  height: 100%;
+  padding-bottom: 3rem;
+}
+
+.quiz-holder .timer-holder,
+.quiz-holder .submit-button,
+.quiz-holder .result-holder {
+  border: 2px solid #7F265B;
+  outline: none;
+  background-color: white;
+  color: white;
+  border-radius: 0.6rem;
+  letter-spacing: 0.1rem;
+  font-family: "Nunito", serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 19px;
+}
+
+.quiz-holder .submit-button {
+  width: 100%;
+  border: none;
+  height: 4.5rem;
+  cursor: pointer;
+  background-color: #7F265B;
+  -webkit-transition: 0.2s ease-in-out;
+  transition: 0.2s ease-in-out;
+}
+
+.quiz-holder .submit-button:hover {
+  background-color: transparent;
+  border: 2px solid #7F265B;
+  color: #7F265B;
+}
+
+.quiz-holder .timer-holder {
+  position: fixed;
+  right: 2rem;
+  top: 3rem;
+  color: #7F265B;
+  padding: 10px 20px;
+  min-width: 100px;
+  min-height: 43px;
+  text-align: center;
+  -webkit-box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
+          box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
+}
+
+.quiz-holder .result-holder {
+  position: fixed;
+  left: 2rem;
+  top: 3rem;
+  color: #7F265B;
+  font-weight: 900;
+  min-height: 4.3rem;
+  text-align: center;
+  -webkit-box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
+          box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
+  min-width: 50px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  font-size: 25px;
+  padding: 1rem 2rem;
+}
+
+.quiz-form {
+  padding-top: 3rem;
+}
+/*# sourceMappingURL=quiz.component.css.map */

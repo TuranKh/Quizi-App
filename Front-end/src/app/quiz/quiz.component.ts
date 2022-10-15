@@ -1,11 +1,9 @@
-import { DomSanitizer } from '@angular/platform-browser';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { QuizService } from '../services/quiz.service';
 import { SnackbarService } from '../services/snackbar.service';
 import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
-import { questionAnswers } from '../models/enums/questionAnswer.enum';
 
 @Component({
   selector: 'app-quiz',
@@ -25,6 +23,8 @@ export class QuizComponent implements OnInit, AfterViewInit {
   submitButton = true;
 
   countdown: number | null = null;
+  correctAnswers = [];
+  scorePercent: number | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -61,50 +61,58 @@ export class QuizComponent implements OnInit, AfterViewInit {
 
   submitAnswers() {
     this.examEnd = true;
-    console.log(this.questionsFormArray, ' questions form array');
-    let answers = '';
+    let userAnswers = '';
     this.questionsFormArray?.value.forEach((question) => {
       if (question.selectedAnswerId) {
-        answers += question.selectedAnswerId + '';
+        userAnswers += question.selectedAnswerId + '';
       } else {
-        answers += '9';
+        userAnswers += '9';
       }
     });
 
     clearInterval(this.interval);
     const submitAnswers = {
       id: this.userId,
-      answers: Number(answers),
+      userAnswers: userAnswers,
     };
-    this.quiz.submitUserAnswers(submitAnswers).subscribe((res) => {
+
+    this.quiz.submitUserAnswers(submitAnswers).subscribe((res: any) => {
+      this.correctAnswers = res.answers;
+      this.scorePercent = res.scorePercent;
+      clearInterval(this.interval);
       this.submitButton = false;
     });
-    // this.router.navigateByUrl('/login');
   }
 
   getAllQuestions() {
-    this.quiz.getQuestions().subscribe(
-      (res: any) => {
-        if (res.status !== 401 || res.status !== 406) {
-          if (res.length !== 0) {
-            this.initForm(res);
+    const userId = this.userCredentials.getUserId();
+    if (userId) {
+      this.quiz.getQuestions(userId)?.subscribe(
+        (res: any) => {
+          if (res.status !== 401 || res.status !== 406) {
+            if (res.length !== 0) {
+              this.initForm(res);
+            } else {
+              this.snackBar.openFailureSnackBar(
+                'Hal-hazırda aktiv imtahan yoxdur!'
+              );
+              this.router.navigateByUrl('/login');
+            }
           } else {
-            this.snackBar.openFailureSnackBar(
-              'Hal-hazırda aktiv imtahan yoxdur!'
-            );
+            this.snackBar.openFailureSnackBar(res.message);
             this.router.navigateByUrl('/login');
           }
-        } else {
-          this.snackBar.openFailureSnackBar(res.message);
+        },
+        (err) => {
+          this.snackBar.openFailureSnackBar(err.error.message);
           this.router.navigateByUrl('/login');
         }
-      },
-      (err) => {
-        this.snackBar.openFailureSnackBar(err.error.message);
-        this.router.navigateByUrl('/login');
-      }
-    );
-    this.startCountdown();
+      );
+      this.startCountdown();
+    } else {
+      this.snackBar.openFailureSnackBar('Hesabınıza daxil olun!');
+      this.router.navigateByUrl('/login');
+    }
   }
 
   initForm(questions: Array<any>) {

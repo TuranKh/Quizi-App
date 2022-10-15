@@ -11,7 +11,6 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class WaitingListComponent implements OnInit {
   constructor(
-    private _userService: UserService,
     private _adminService: AdminService,
     private snackBar: SnackbarService,
     private router: Router

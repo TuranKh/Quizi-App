@@ -1,7 +1,5 @@
-<div class="question-holder">
+<div class="question-holder" [ngClass]="correctAnswer ===0 ? 'nothing' : correctAnswer === question.value.selectedAnswerId  ? 'green' : 'red'">
   <p class="question-text">
-    <!-- question is formgroup -->
-    <!-- {{ question | json }} -->
     {{ question.value.order }}
   </p>
 
@@ -23,4 +21,5 @@
       </label>
     </li>
   </ul>
+  <p style="font-size: 18px;" *ngIf="correctAnswer !==0">Düzgün cavab: {{questionAnswers[correctAnswer]}}</p>
 </div>

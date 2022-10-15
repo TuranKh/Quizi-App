@@ -17,6 +17,7 @@ var storage = multer.diskStorage({
     cb(null, Date.now() + file.originalname);
   },
 });
+var answers = [];
 var userRole = 0;
 var userId;
 var isUserValid = false;
@@ -113,10 +114,24 @@ router.post("/admin/update-user", urlencodedParser, async (req, res) => {
 });
 
 router.post("/submit-answers", urlencodedParser, async (req, res) => {
-  const userAnswers = req.body;
-
-  let query = `UPDATE user SET answers='${userAnswers.answers}' WHERE id='${userAnswers.id}';`;
-  querysender.sendFinalQuery(query, res);
+  const { id: userId, userAnswers } = req.body;
+  const numberOfAnswers = userAnswers.length;
+  let score = 0;
+  for (let index = 0; index < numberOfAnswers; index++) {
+    if (userAnswers.charAt(index) == answers[index]) {
+      score++;
+    }
+  }
+  const scorePercent = Math.round((score * 100) / numberOfAnswers);
+  let query = `UPDATE user SET answers='${Number(
+    userAnswers
+  )}', last_quiz_score=${scorePercent} WHERE id='${userId}';`;
+  querysender.queryWithoutResponse(query, res);
+  const correctAnswersAndScore = {
+    answers,
+    scorePercent,
+  };
+  res.status(201).send(correctAnswersAndScore);
 });
 
 router.post("/admin/send-quiz", upload.array("photos", 100), (req, res) => {
@@ -161,7 +176,6 @@ const resetQuestionsAndUsers = function () {
 router.get("/get-quiz", urlencodedParser, async (req, res) => {
   userId = req.query.id;
   const attendedQuiz = await didUserAttendedQuiz();
-  console.log(attendedQuiz, " attended");
   if (attendedQuiz) {
     res.status(406).send({
       message: "Siz mövcud olan son imtahana artıq giriş etmisiniz!",
@@ -169,29 +183,53 @@ router.get("/get-quiz", urlencodedParser, async (req, res) => {
   } else {
     if (isUserValid) {
       let query =
-        "SELECT questions.id, question_image, quiz.duration FROM `questions` JOIN quiz ON questions.quiz_id = quiz.is_active WHERE questions.quiz_id = 1";
+        "SELECT questions.id, questions.answer, question_image, quiz.duration FROM `questions` JOIN quiz ON questions.quiz_id = quiz.is_active WHERE questions.quiz_id = 1";
       userAttendedQuiz();
-      // SELECT question_image, quiz.duration
-      // FROM questions
-      // JOIN quiz ON questions.quiz_id = quiz.is_active
-      // WHERE questions.quiz_id = 1
-
-      querysender.sendFinalQuery(query, res);
+      getQuestionsAndAnswers(query, res);
     } else {
       res.status(401).send({ message: "Sistemə daxil olun" });
     }
   }
 });
 
-const userAttendedQuiz = function () {
-  let query = `UPDATE user SET attended_quiz = '1' WHERE id=${userId}`;
-  querysender.queryWithoutResponse(query);
+router.get("/get-quiz-view", urlencodedParser, async (req, res) => {
+  let query =
+    "SELECT answer, question_image FROM `questions` WHERE quiz_id = 1";
+  querysender.sendFinalQuery(query, res);
+});
+
+router.get("/user/statistics", urlencodedParser, async (req, res) => {
+  let query = `SELECT id, name, surname, email, phone_number, last_quiz_score, attended_quiz, answers FROM user`;
+  querysender.sendFinalQuery(query, res);
+});
+
+const getQuestionsAndAnswers = async function (query, res) {
+  answers = [];
+  const questionsAndAnswers =
+    await querysender.submitAnswersAndGetCorrectAnswers(query);
+  const userQuestions = [];
+
+  questionsAndAnswers.forEach((value) => {
+    let temp = {
+      id: value.id,
+      question_image: value.question_image,
+      duration: value.duration,
+    };
+    userQuestions.push(temp);
+    answers.push(value.answer);
+  });
+
+  res.status(201).send(userQuestions);
 };
 
 const didUserAttendedQuiz = async function () {
   let query = `SELECT attended_quiz FROM user WHERE id=${userId}`;
   const result = await querysender.checkUserQuizAttendance(query);
   return result === 1;
+};
+const userAttendedQuiz = function () {
+  let query = `UPDATE user SET attended_quiz = '1' WHERE id=${userId}`;
+  querysender.queryWithoutResponse(query);
 };
 
 module.exports = router;

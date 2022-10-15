@@ -10,17 +10,19 @@ export class QuizService {
 
   baseUrl = 'http://localhost:8000/';
 
-  getQuestions() {
-    const userId = this.userService.getUserId();
-    return this.http.get(`${this.baseUrl}get-quiz?id=${userId}`);
+  getQuestions(userId: number) {
+      return this.http.get(`${this.baseUrl}get-quiz?id=${userId}`);
   }
   getExamDuration() {
     return this.http.get(`${this.baseUrl}duration`);
   }
 
-  submitUserAnswers(answers: any) {
+  submitUserAnswers(answers: any) { // Submit user answers and get correct ones
     return this.http.post(`${this.baseUrl}submit-answers`, answers);
   }
 
-  getAnswers() {}
+  getQuizView() {
+    return this.http.get(`${this.baseUrl}get-quiz-view`)
+  }
+
 }
