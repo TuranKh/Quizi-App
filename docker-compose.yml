@@ -1,0 +1,13 @@
+version: '3.5'
+services:
+  backend:
+    build: ./Backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - "./app:/usr/src/app/app"
+  frontend: 
+    build: ./Frontend
+    ports: 
+      - "80:80"
+    restart: always 
