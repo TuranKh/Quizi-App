@@ -8,7 +8,7 @@ import { UserService } from './user.service';
 export class QuizService {
   constructor(private http: HttpClient, private userService: UserService) {}
 
-  baseUrl = 'http://localhost:8000/';
+  baseUrl = 'http://65.108.246.46:8000/';
 
   getQuestions(userId: number) {
       return this.http.get(`${this.baseUrl}get-quiz?id=${userId}`);
