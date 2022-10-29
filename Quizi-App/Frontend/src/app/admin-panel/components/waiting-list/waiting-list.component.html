@@ -1,0 +1,29 @@
+<div class="waiting-list">
+  <table>
+    <thead>
+      <tr>
+        <th>Ad/Soyad</th>
+        <th>Elektron ünvan</th>
+        <th>Əlaqə nömrəsi</th>
+        <th>Kimlik</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of tableData">
+        <td>{{ item.name }} {{ item.surname }}</td>
+        <td>{{ item.email }}</td>
+        <td>{{ item.phone_number }}</td>
+        <td>{{ item.user_role ? "Admin" : "Müəllim" }}</td>
+        <td class="action-buttons">
+          <div (click)="acceptUser(item.id)" class="accept-wrapper">
+            <img src="../../../../assets/SVGs/accept.svg" />
+          </div>
+          <div (click)="denyUser(item.id)" class="bin-wrapper">
+            <img src="../../../../assets/SVGs/bin.svg" />
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

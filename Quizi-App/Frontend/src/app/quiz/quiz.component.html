@@ -1,0 +1,28 @@
+<div class="quiz-holder">
+  <div class="quiz-content">
+    <form class="quiz-form">
+      <app-question
+        [isExamEnd]="examEnd"
+        [question]="item"
+        [correctAnswer] = 'correctAnswers.length ? correctAnswers[index] : 0'
+        *ngFor="let item of questionsFormArray?.controls; let index = index"
+      >
+      </app-question>
+      <button
+        *ngIf="submitButton"
+        (click)="submitAnswers()"
+        class="submit-button"
+        type="submit"
+      >
+        İmtahanı yekunlaşdır
+      </button>
+    </form>
+
+    <div class="timer-holder">
+      {{ message }}
+    </div>
+    <div *ngIf="scorePercent !== null" class="result-holder">
+      Nəticəniz: {{scorePercent}}%
+    </div>
+  </div>
+</div>

@@ -1,0 +1,34 @@
+<!-- <app-create-new-quiz></app-create-new-quiz> -->
+
+<div class="admin-dashboard">
+  <aside>
+    <div>
+      <ul>
+        <li
+          (click)="checkActiveTab(1)"
+          [ngClass]="activeMenu === 1 ? 'active' : ''"
+          routerLink="/admin/statistics"
+        >
+          Statistika
+        </li>
+        <li
+          (click)="checkActiveTab(2)"
+          [ngClass]="activeMenu === 2 ? 'active' : ''"
+          routerLink="/admin/waiting-list"
+        >
+          Gözləmədə
+        </li>
+        <li
+          (click)="checkActiveTab(3)"
+          [ngClass]="activeMenu === 3 ? 'active' : ''"
+          routerLink="/admin/new-quiz"
+        >
+          Yeni imtahan
+        </li>
+      </ul>
+    </div>
+  </aside>
+  <div class="main">
+    <router-outlet></router-outlet>
+  </div>
+</div>
