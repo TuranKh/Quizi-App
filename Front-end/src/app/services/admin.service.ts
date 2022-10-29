@@ -7,7 +7,7 @@ import { Injectable } from '@angular/core';
 export class AdminService {
   constructor(private http: HttpClient) {}
 
-  baseUrl = 'http://localhost:8000/admin';
+  baseUrl = 'http://65.108.246.46:8000/admin';
 
   sendQuestions(params: any, formData: FormData) {
     return this.http.post(`${this.baseUrl}/send-quiz`, formData, {

@@ -7,7 +7,7 @@ import { Injectable } from '@angular/core';
 export class UserService {
   constructor(private http: HttpClient) {}
 
-  baseUrl = 'http://localhost:8000/user';
+  baseUrl = 'http://65.108.246.46:8000/user';
   userId: number = 0;
 
   logInUser(loginData: any) {

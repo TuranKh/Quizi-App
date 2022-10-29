@@ -16,9 +16,9 @@ var mysql = require("mysql");
 app.use(router);
 
 var con = mysql.createConnection({
-  host: "localhost",
+  host: "65.108.246.46",
   user: "root",
-  password: "",
+  password: "turan",
   database: "quiz_app",
 });
 
