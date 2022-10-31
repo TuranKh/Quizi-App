@@ -8,6 +8,8 @@ export class UserService {
   constructor(private http: HttpClient) {}
 
   baseUrl = 'http://65.108.246.46:8000/user';
+  // baseUrl = 'http://localhost:8000/user';
+
   userId: number = 0;
 
   logInUser(loginData: any) {
@@ -33,6 +35,6 @@ export class UserService {
     return this.userId;
   }
   getUserAnswers(userId: number) {
-    return this.http.get(this.baseUrl + `/statistics?id=${userId}`)
+    return this.http.get(this.baseUrl + `/statistics?id=${userId}`);
   }
 }

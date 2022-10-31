@@ -1,19 +1,15 @@
 const express = require("express");
 const app = express();
-var mysql = require("mysql");
 var cors = require("cors");
-const { query } = require("express");
-var con = mysql.createConnection({
-  host: "65.108.246.46",
-  user: "root",
-  password: "turan",
-  database: "quiz_app",
-});
+const label = "default";
+const con = require("n3-node-mysql-singleton").getInstance(label);
+
 app.use(cors());
 
 const sendFinalQuery = (mysql, res) => {
   con.query(mysql, (err, result, fields) => {
     if (err) throw err;
+    con.release();
     res.send(result);
   });
 };
@@ -21,6 +17,7 @@ const sendFinalQuery = (mysql, res) => {
 const queryWithoutResponse = (mysql) => {
   con.query(mysql, (err, result) => {
     if (err) throw err;
+    con.release();
     return result;
   });
 };
@@ -30,6 +27,7 @@ const submitAnswersAndGetCorrectAnswers = (mysql) => {
     con.query(mysql, (err, result) => {
       if (err) throw err;
       resolve(result);
+      con.release();
     });
   });
 };
@@ -39,6 +37,7 @@ const checkUserQuizAttendance = (mysql) => {
       if (err) throw err;
       try {
         resolve(result[0].attended_quiz);
+        con.release();
       } catch (error) {}
     });
   });
@@ -49,6 +48,7 @@ const sendLoginQuery = (mysql) => {
     con.query(mysql, (err, result, fields) => {
       if (err) throw err;
       resolve(result);
+      con.release();
     });
   });
 };
@@ -57,6 +57,7 @@ function getOriginalPassword(mysql, res) {
   con.query(mysql, (err, result, fields) => {
     if (err) throw err;
     final += result[0].password;
+    con.release();
   });
   return final;
 }
