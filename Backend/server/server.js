@@ -16,6 +16,6 @@ app.use(express.json()); // getting empty post request
 var mysql = require("mysql");
 app.use(router);
 
-app.listen(8000, () => {
+app.listen('8000','0.0.0.0', () => {
   console.log("server started");
 });
