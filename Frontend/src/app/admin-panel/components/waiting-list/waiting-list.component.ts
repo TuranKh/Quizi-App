@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AdminService } from 'src/app/services/admin.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
-import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-waiting-list',
@@ -28,6 +27,7 @@ export class WaitingListComponent implements OnInit {
         this.tableData = res;
       },
       (err) => {
+        console.log(err);
         this.snackBar.openFailureSnackBar(
           'Sistemdən istifadə etmək hüququnuz yoxdur!'
         );

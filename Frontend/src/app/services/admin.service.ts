@@ -1,13 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AdminService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private _authService: AuthService) {}
 
-  baseUrl = 'http://65.108.246.46:8000/admin';
+  baseUrl = `${this._authService.environment}admin`;
+
   // baseUrl = 'http://localhost:8000/admin';
 
   sendQuestions(params: any, formData: FormData) {

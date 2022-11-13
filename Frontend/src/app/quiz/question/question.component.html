@@ -1,10 +1,19 @@
-<div class="question-holder" [ngClass]="correctAnswer ===0 ? 'nothing' : correctAnswer === question.value.selectedAnswerId  ? 'green' : 'red'">
+<div
+  class="question-holder"
+  [ngClass]="
+    correctAnswer === 0
+      ? 'nothing'
+      : correctAnswer === question.value.selectedAnswerId
+      ? 'green'
+      : 'red'
+  "
+>
   <p class="question-text">
     {{ question.value.order }}
   </p>
 
   <div class="image-holder">
-    <img src="http://65.108.246.46:8000/images/{{ question.value.image }}" alt="" />
+    <img src="{{ environment }}images/{{ question.value.image }}" alt="" />
   </div>
   <ul>
     <li *ngFor="let option of question.value.answerOptions">
@@ -21,5 +30,7 @@
       </label>
     </li>
   </ul>
-  <p style="font-size: 18px;" *ngIf="correctAnswer !==0">Düzgün cavab: {{questionAnswers[correctAnswer]}}</p>
+  <p style="font-size: 18px" *ngIf="correctAnswer !== 0">
+    Düzgün cavab: {{ questionAnswers[correctAnswer] }}
+  </p>
 </div>

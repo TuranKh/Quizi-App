@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { UserService } from './user.service';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class QuizService {
-  constructor(private http: HttpClient, private userService: UserService) {}
+  constructor(private http: HttpClient, private _authService: AuthService) {}
 
-  baseUrl = 'http://65.108.246.46:8000/';
+  baseUrl = this._authService.environment;
   // baseUrl = 'http://localhost:8000/';
 
   getQuestions(userId: number) {

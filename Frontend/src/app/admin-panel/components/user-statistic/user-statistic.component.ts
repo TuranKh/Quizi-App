@@ -1,10 +1,9 @@
-import { ThisReceiver } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { QuizService } from 'src/app/services/quiz.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { UserService } from 'src/app/services/user.service';
 import { questionAnswers } from 'src/app/models/enums/questionAnswer.enum';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-user-statistic',
@@ -15,13 +14,15 @@ export class UserStatisticComponent implements OnInit {
   constructor(
     private userService: UserService,
     private quizService: QuizService,
-    private snackbar: SnackbarService
+    private snackbar: SnackbarService,
+    private _authService: AuthService
   ) {}
 
   tableData: any;
   questions: any[] = [];
   attendedQuiz: boolean = false;
   userAnswers: any;
+  environment = this._authService.environment;
 
   ngOnInit(): void {
     this.showStatistics();

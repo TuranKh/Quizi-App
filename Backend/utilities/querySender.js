@@ -1,8 +1,7 @@
 const express = require("express");
 const app = express();
 var cors = require("cors");
-const label = "default";
-const con = require("n3-node-mysql-singleton").getInstance(label);
+const con = require("n3-node-mysql-singleton").getInstance("default");
 
 app.use(cors());
 
