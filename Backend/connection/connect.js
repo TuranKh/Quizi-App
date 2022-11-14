@@ -19,4 +19,4 @@ const localDb = {
 
 const label = "default";
 
-const db = require("n3-node-mysql-singleton").getInstance(localDb, label);
+const db = require("n3-node-mysql-singleton").getInstance(prodDb, label);
